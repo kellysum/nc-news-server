@@ -37,4 +37,7 @@ describe("GET /api/topics", ()=>{
             })
         })
     })
+describe("GET /api", ()=>{
+    test('200:')
+})
 
