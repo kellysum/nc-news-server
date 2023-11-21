@@ -1,7 +1,7 @@
 const express = require("express");
-const {getAllTopics, getArticleId} = require("../controller/controller")
+const {getAllTopics, getArticleId,getAllApi} = require("../controller/controller")
 const {handle404, handleCustomErrors, handlePsqErrors} = require("../error")
-const {getAllTopics, getAllApi} = require("../controller/controller")
+
 
 const app = express();
 app.use(express.json())
