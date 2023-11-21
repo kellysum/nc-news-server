@@ -4,6 +4,7 @@ const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const topicData = require("../db/data/test-data")
 const topics = require("../db/data/test-data/topics")
+const articles = require("../db/data/test-data/articles")
 const endpointsValue = require("../endpoints.json")
 
 beforeEach(()=>{
@@ -37,6 +38,47 @@ describe("GET /api/topics", ()=>{
             })
         })
     })
+
+describe("GET /api/articles/:article_id", ()=>{
+    test.only('200: responds with the article by the article id', ()=>{
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({body})=>{   
+        const {articles} = body
+        expect(articles.article_id).toBe(1)
+        expect(articles).toMatchObject({
+        title: expect.any(String),
+        topic: expect.any(String),
+        article_id: expect.any(Number),
+        author: expect.any(String),
+        body: expect.any(String),
+        created_at: expect.any(String),
+        votes:expect.any(Number),
+        article_img_url:
+         expect.any(String),
+
+        })
+        })
+    })
+    test.only("404: responds with an error message for a not found path", ()=>{
+        return request(app)
+        .get("/api/articles/200")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe('Article not found')
+        })
+    })
+    test.only("400: responds with an error message for a bad request", ()=>{
+        return request(app)
+        .get("/api/articles/nonarticle")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad request')
+        })
+    })
+})
+
 describe("GET /api",()=>{
     test('200: responds with an object describing all the availbale endpoints on the API', ()=>{
         return request(app)
