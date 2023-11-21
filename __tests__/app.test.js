@@ -87,7 +87,6 @@ describe("GET /api",()=>{
         .expect(200)
         .then(({body})=>{
             const {endpoints} = body
-            console.log(endpoints)
             Object.keys(endpointsValue).forEach((endpointKey)=>{expect(endpoints[endpointKey]).toEqual(endpointsValue[endpointKey])
                 
                 
