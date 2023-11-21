@@ -6,6 +6,7 @@ const topicData = require("../db/data/test-data")
 const topics = require("../db/data/test-data/topics")
 const articles = require("../db/data/test-data/articles")
 const endpointsValue = require("../endpoints.json")
+require("jest-sorted")
 
 beforeEach(()=>{
     return seed(topicData)
@@ -103,6 +104,7 @@ describe("GET /api/articles", ()=>{
         .then(({body})=>{
             const {articles} = body
             expect(articles).toHaveLength(13)
+            expect(articles).toBeSortedBy("created_at", {descending:true})
             articles.forEach((article)=>{
                 expect(article).toMatchObject({
                     author: expect.any(String),
