@@ -4,7 +4,7 @@ const db = require("../db/connection")
 const seed = require("../db/seeds/seed")
 const topicData = require("../db/data/test-data")
 const topics = require("../db/data/test-data/topics")
-
+const endpointsValue = require("../endpoints.json")
 
 beforeEach(()=>{
     return seed(topicData)
@@ -37,4 +37,22 @@ describe("GET /api/topics", ()=>{
             })
         })
     })
+describe("GET /api",()=>{
+    test('200: responds with an object describing all the availbale endpoints on the API', ()=>{
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({body})=>{
+            const {endpoints} = body
+            console.log(endpoints)
+            Object.keys(endpointsValue).forEach((endpointKey)=>{expect(endpoints[endpointKey]).toEqual(endpointsValue[endpointKey])
+                
+                
+                 }) 
+             })
+            })
+            
+        })
+    
+
 
