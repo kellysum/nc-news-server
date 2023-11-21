@@ -1,6 +1,6 @@
-
 const { selectArticleByArticleId } = require("../model/articles.model")
 const { selectTopics } = require("../model/topics.model")
+const endpoints = require("../endpoints.json")
 
 exports.getAllTopics = (req, res, next) => {
     selectTopics()
@@ -19,5 +19,9 @@ exports.getArticleId = (req, res, next)=>{
         res.status(200).send({articles})
     })
     .catch(next)
+}
+
+exports.getAllApi = (req, res)=>{
+res.status(200).send({endpoints})
 }
 
