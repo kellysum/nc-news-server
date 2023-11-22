@@ -40,4 +40,5 @@ exports.postComment = (req, res, next)=>{
     insertComment(newComment, article_id).then((postedComments)=>{
         res.status(201).send({postedComments})
     })
+    .catch(next)
 }

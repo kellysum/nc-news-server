@@ -140,7 +140,48 @@ describe('POST /api/articles/:article_id/comments', ()=>{
             expect(postedComments.body).toBe(newComment.comment)
         })
     })
-    test('400')
+    test('400: responds with an error message if the article_id does not exist', ()=>{
+        const newComment = {username : 'butter_bridge', comment : 'testing comment'}
+        return request(app)
+        .post('/api/articles/notnumber/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad request")
+        })
+    })
+    test('400: responds with an error message if the username does not exist', ()=>{
+        const newComment = {username:'test name', comment:'testing comment'}
+        return request(app)
+        .post('/api/articles/1/comments')
+        .send(newComment)
+        .expect(400)
+        .then(({body})=>{
+         expect(body.msg).toBe('Bad request')
+
+
+        })
+    })
+    test('404: responds with an error message for a not found article', ()=>{
+        const newComment = {username:'test name', comment:'testing comment'}
+        return request(app)
+        .post('/api/article/1/comments')
+        .send(newComment)
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("path not found")
+        })
+    })
+    test('404: responds with an error message for a path', ()=>{
+        const newComment = {username:'test name', comment:'testing comment'}
+        return request(app)
+        .post('/api/articles/1/comment')
+        .send(newComment)
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("path not found")
+        })
+    })
 })
 
     
