@@ -1,5 +1,7 @@
 const db = require("../db/connection");
+
 const comments = require("../db/data/test-data/comments");
+
 
 exports.selectComments = (article_id)=>{
     return db.query(`SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC`, [article_id])
@@ -15,6 +17,7 @@ exports.checkCommentsExists = (comment_id) =>{
             return Promise.reject({status : 404, msg:"not found"})
         }
     })
+
 }
 
 exports.insertComment=(comments, article_id) =>{
@@ -27,5 +30,6 @@ exports.insertComment=(comments, article_id) =>{
        console.log(data.rows[0])
         return data.rows[0]
     })
+
 
 }
