@@ -132,7 +132,7 @@ describe("GET /api/articles", ()=>{
 describe("GET /api/articles/:article_id/comments", ()=>{
     test('200: responds with an array of comments for the given article_id', ()=>{
         return request(app)
-        .get("/api/articles/:article_id/comments")
+        .get("/api/articles/1/comments")
         .expect(200)
         .then(({body})=>{
             const {comments} = body
@@ -150,7 +150,24 @@ describe("GET /api/articles/:article_id/comments", ()=>{
 
         })
     })
-})
+    test('404: responds with an error message for a not found path', ()=>{ return request(app)
+        .get("/api/articles/100/comments")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("not found")
+        })
+    })
+    test('200: responds with an empty array if the article_id exists but there are no comments with that article id', ()=>{
+        return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toEqual([])
+        })
+    })
+
+    })
+
 
     
 
