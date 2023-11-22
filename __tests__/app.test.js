@@ -136,6 +136,7 @@ describe("GET /api/articles/:article_id/comments", ()=>{
         .expect(200)
         .then(({body})=>{
             const {comments} = body
+            expect(comments).toHaveLength(11)
             expect(comments).toBeSortedBy("created_at")
             comments.forEach((comment)=>{
                 expect(comment).toMatchObject({
@@ -150,7 +151,8 @@ describe("GET /api/articles/:article_id/comments", ()=>{
 
         })
     })
-    test('404: responds with an error message for a not found path', ()=>{ return request(app)
+    test('404: responds with an error message for a not found path', ()=>{ 
+        return request(app)
         .get("/api/articles/100/comments")
         .expect(404)
         .then(({body})=>{
@@ -163,6 +165,14 @@ describe("GET /api/articles/:article_id/comments", ()=>{
         .expect(200)
         .then(({body})=>{
             expect(body.comments).toEqual([])
+        })
+    })
+    test('400: respond with an error message if the article_id is not an number', ()=>{
+        return request(app)
+        .get("/api/articles/notannumber/comments")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad request")
         })
     })
 
