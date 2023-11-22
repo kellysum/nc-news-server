@@ -1,4 +1,6 @@
+
 const { selectArticleByArticleId, selectArticles, checkArticleExist } = require("../model/articles.model")
+
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
 const { selectComments } = require("../model/comments.model")
@@ -34,6 +36,7 @@ exports.getAllArticles = (req, res, next)=>{
     .catch(next)
 }
 
+
 exports.getCommentByArticleId = (req, res, next)=>{
     const {article_id} = req.params
     const commentPromise =  [checkArticleExist(article_id), selectComments(article_id)]
@@ -45,3 +48,4 @@ exports.getCommentByArticleId = (req, res, next)=>{
     })
     .catch(next)
 }
+
