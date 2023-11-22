@@ -1,6 +1,7 @@
 const { selectArticleByArticleId, selectArticles } = require("../model/articles.model")
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
+const { insertComment } = require("../model/comments.model")
 
 exports.getAllTopics = (req, res, next) => {
     selectTopics()
@@ -34,8 +35,9 @@ exports.getAllArticles = (req, res, next)=>{
 }
 exports.postComment = (req, res, next)=>{
     const {article_id} = req.params 
+   
     const newComment = req.body
-    insertComment(newComment, article_id).then((comments)=>{
-        res.status(201).send({comments})
+    insertComment(newComment, article_id).then((postedComments)=>{
+        res.status(201).send({postedComments})
     })
 }

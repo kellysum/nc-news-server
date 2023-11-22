@@ -137,9 +137,10 @@ describe('POST /api/articles/:article_id/comments', ()=>{
         .then(({body})=>{
             const {postedComments} = body
             expect(postedComments.article_id).toBe(1)
-            expect(postedComments).toBe(newComment(comments))
+            expect(postedComments.body).toBe(newComment.comment)
         })
     })
+    test('400')
 })
 
     
