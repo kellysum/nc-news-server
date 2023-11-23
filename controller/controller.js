@@ -3,7 +3,7 @@ const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote 
 
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
-const { insertComment, checkCommentsExists } = require("../model/comments.model")
+const { insertComment, checkCommentsExists, getCommentId, deleteByCommentId } = require("../model/comments.model")
 const {checkUserExist} = require("../model/username.model")
 
 
@@ -84,6 +84,21 @@ exports.patchArticleVote = (req, res, next)=>{
     updateVote(article_id, inc_votes)
     .then((updatedArticle)=>{
         res.status(200).send({ article: updatedArticle })
+        })
+        .catch(next)
+    }
+
+    exports.deleteComment = (req, res, next)=>{
+        const {comment_id} = req.params
+
+      const deleteCommentPromise = [ deleteByCommentId(comment_id)]
+       if(comment_id){
+        deleteCommentPromise.push(checkCommentsExists(comment_id))
+       }
+       Promise.all(deleteCommentPromise)
+      .then(()=>{
+            
+        res.status(204).send()
         })
         .catch(next)
     }
