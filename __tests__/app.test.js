@@ -260,6 +260,37 @@ describe('PATCH /api/articles/:article_id', ()=>{
                 expect(body.msg).toBe('Bad request')
                 })
             })
+            test('400 : responds with an error message when inc_votes is 0', ()=>{
+                const newVotes = 0
+                return request(app)
+                .patch('/api/articles/1')
+                .send({inc_votes:newVotes})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request')
+                    })
+                })
+            test('400 : responds with an error message when article_id is not an number', ()=>{
+                const newVotes = 2
+                return request(app)
+                .patch('/api/articles/hi')
+                .send({inc_votes:newVotes})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request')
+                    })
+                })
+                test('404 : responds with an error message when article_id does not exist', ()=>{
+                    const newVotes = 2
+                    return request(app)
+                    .patch('/api/articles/200')
+                    .send({inc_votes:newVotes})
+                    .expect(404)
+                    .then(({body})=>{
+                        expect(body.msg).toBe('Article not found')
+                        })
+                    })
+            
     })
 
     

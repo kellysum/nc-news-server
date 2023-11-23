@@ -53,7 +53,7 @@ exports.patchArticleVote = (req, res, next)=>{
     const {article_id} = req.params
     const {inc_votes} = req.body
 
-    if(article.votes >)
+
     updateVote(article_id, inc_votes)
     .then((updatedArticle)=>{
         if(!updatedArticle){
