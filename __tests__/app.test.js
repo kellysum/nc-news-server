@@ -180,7 +180,122 @@ describe('POST /api/articles/:article_id/comments', ()=>{
             expect(body.msg).toBe("path not found")
         })
     })
-})
+
+    })
+
+describe('PATCH /api/articles/:article_id', ()=>{
+    test('200 : responds with an updated object with incremented votes given by user at the article_id', ()=>{
+        const newVotes = 10
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(200)
+        .then(({body})=>{
+            const {article} = body
+            expect(article.votes).toBe(110)
+            expect(article).toMatchObject({
+                article_id: 1,
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
+        })
+    })
+    test('200 : responds with an updated object with decremented votes given by user at the article_id', ()=>{
+        const newVotes = -10
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(200)
+        .then(({body})=>{
+            const {article} = body
+            expect(article.votes).toBe(90)
+            expect(article).toMatchObject({
+                article_id: 1,
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
+        })
+    })
+    test('200 : responds with an updated object with decremented votes can be 0', ()=>{
+        const newVotes = -100
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(200)
+        .then(({body})=>{
+            const {article} = body
+            expect(article.votes).toBe(0)
+            expect(article).toMatchObject({
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
+        })
+    })
+    test('400 : responds with an error message when inc_votes is not an number', ()=>{
+        const newVotes = 'hello'
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad request')
+            })
+        })
+        test('400 : responds with an error message when inc_votes is higher than the votes in article', ()=>{
+            const newVotes = -200
+            return request(app)
+            .patch('/api/articles/1')
+            .send({inc_votes:newVotes})
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request')
+                })
+            })
+            test('400 : responds with an error message when inc_votes is 0', ()=>{
+                const newVotes = 0
+                return request(app)
+                .patch('/api/articles/1')
+                .send({inc_votes:newVotes})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request')
+                    })
+                })
+            test('400 : responds with an error message when article_id is not an number', ()=>{
+                const newVotes = 2
+                return request(app)
+                .patch('/api/articles/hi')
+                .send({inc_votes:newVotes})
+                .expect(400)
+                .then(({body})=>{
+                    expect(body.msg).toBe('Bad request')
+                    })
+                })
+                test('404 : responds with an error message when article_id does not exist', ()=>{
+                    const newVotes = 2
+                    return request(app)
+                    .patch('/api/articles/200')
+                    .send({inc_votes:newVotes})
+                    .expect(404)
+                    .then(({body})=>{
+                        expect(body.msg).toBe('Article not found')
+                        })
+                    })
+            
+    })
 
     
 

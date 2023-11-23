@@ -38,3 +38,41 @@ exports.checkArticleExist = (article_id)=>{
     })
 }
 
+exports.updateVote = (article_id, inc_votes) => {
+    if (inc_votes === 0 || typeof inc_votes !== 'number') {
+      return Promise.reject({ status: 400, msg: 'Bad request' });
+    }
+  
+    return db.query('SELECT votes FROM articles WHERE article_id = $1', [article_id])
+      .then((result) => {
+        if (result.rows.length === 0) {
+          return Promise.reject({ status: 404, msg: 'Article not found' });
+        }else{
+            return result
+        }
+      })
+      .then((result) => {
+        const currentVotes = result.rows[0].votes;
+        const updatedVotes = currentVotes + inc_votes;
+  
+        if (updatedVotes < 0) {
+          return Promise.reject({ status: 400, msg: 'Bad request' });
+        }
+  
+        let updateQuery;
+        let queryParams;
+  
+        
+        updateQuery = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
+        queryParams = [inc_votes, article_id];
+       
+          
+  
+        return db.query(updateQuery, queryParams)
+          .then((result) => {
+           
+            return result.rows[0];
+          });
+      })
+  };
+  

@@ -1,11 +1,12 @@
 
+const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote } = require("../model/articles.model")
 
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
 const { insertComment, checkCommentsExists } = require("../model/comments.model")
 const {checkUserExist} = require("../model/username.model")
 
-const { selectArticleByArticleId, selectArticles, checkArticleExist } = require("../model/articles.model")
+
 
 const { selectComments } = require("../model/comments.model")
 
@@ -75,3 +76,14 @@ exports.postComment = (req, res, next)=>{
     })
     .catch(next)
 }
+exports.patchArticleVote = (req, res, next)=>{
+    const {article_id} = req.params
+    const {inc_votes} = req.body
+
+
+    updateVote(article_id, inc_votes)
+    .then((updatedArticle)=>{
+        res.status(200).send({ article: updatedArticle })
+        })
+        .catch(next)
+    }
