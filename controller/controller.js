@@ -9,6 +9,7 @@ const {checkUserExist} = require("../model/username.model")
 
 
 const { selectComments } = require("../model/comments.model")
+const { selectUsers } = require("../model/users.model")
 
 
 exports.getAllTopics = (req, res, next) => {
@@ -101,4 +102,12 @@ exports.patchArticleVote = (req, res, next)=>{
         res.status(204).send()
         })
         .catch(next)
+    }
+    exports.getAllUsers = (req, res, next) => {
+        selectUsers()
+            .then((users) => {
+            res.status(200).send({users})
+            })
+            .catch(next)
+      
     }
