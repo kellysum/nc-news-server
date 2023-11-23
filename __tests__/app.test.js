@@ -179,7 +179,9 @@ describe("GET /api/articles/:article_id/comments", ()=>{
 
     })
 
-
+describe('PATCH /api/articles/:article_id', ()=>{
+    test
+})
     
 
 
