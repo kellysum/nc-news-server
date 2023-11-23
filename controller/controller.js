@@ -1,9 +1,9 @@
 
-const { selectArticleByArticleId, selectArticles } = require("../model/articles.model")
+
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
-const { insertComment } = require("../model/comments.model")
-
+const { insertComment, checkCommentsExists } = require("../model/comments.model")
+const {checkUserExist} = require("../model/username.model")
 
 const { selectArticleByArticleId, selectArticles, checkArticleExist } = require("../model/articles.model")
 
@@ -47,7 +47,7 @@ exports.getCommentByArticleId = (req, res, next)=>{
         res.status(200).send({comments})
     })
     .catch(next)
-
+}
 
 exports.getAllArticles = (req, res, next)=>{
     selectArticles()
@@ -58,10 +58,20 @@ exports.getAllArticles = (req, res, next)=>{
 }
 exports.postComment = (req, res, next)=>{
     const {article_id} = req.params 
+   const newComment = req.body
+   const username = req.body.username
    
-    const newComment = req.body
-    insertComment(newComment, article_id).then((postedComments)=>{
-        res.status(201).send({postedComments})
+   const commentPromise = [insertComment(newComment, article_id)]
+   
+   if(username){
+       commentPromise.push(checkUserExist(username))
+    }
+    
+   Promise.all(commentPromise)
+ .then((resolvedPromises)=>{
+
+    const postedComment = resolvedPromises[0]
+    res.status(201).send({postedComment})
     })
     .catch(next)
 }

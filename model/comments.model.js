@@ -22,13 +22,14 @@ exports.checkCommentsExists = (comment_id) =>{
 
 exports.insertComment=(comments, article_id) =>{
     const {username, comment} = comments
-    console.log(username, comment)
+   
     const psqlQuery = `INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`
 
     return db.query(psqlQuery, [username, comment, article_id])
     .then((data)=>{
-       console.log(data.rows[0])
-        return data.rows[0]
+     
+    return data.rows[0]
+       
     })
 
 
