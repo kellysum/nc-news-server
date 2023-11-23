@@ -180,7 +180,14 @@ describe("GET /api/articles/:article_id/comments", ()=>{
     })
 
 describe('PATCH /api/articles/:article_id', ()=>{
-    test
+    test('204 : responds with an object of updated article by the article_id', ()=>{
+        return request(app)
+        .patch('/api/articles/1')
+        .expect(204)
+        .then(({body})=>{
+            expect(body.article).toMatchObject
+        })
+    })
 })
     
 
