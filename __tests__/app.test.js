@@ -194,7 +194,7 @@ describe('PATCH /api/articles/:article_id', ()=>{
             const {article} = body
             expect(article.votes).toBe(110)
             expect(article).toMatchObject({
-                article_id: expect.any(Number),
+                article_id: 1,
                 topic: expect.any(String),
                 author: expect.any(String),
                 body: expect.any(String),
@@ -214,7 +214,7 @@ describe('PATCH /api/articles/:article_id', ()=>{
             const {article} = body
             expect(article.votes).toBe(90)
             expect(article).toMatchObject({
-                article_id: expect.any(Number),
+                article_id: 1,
                 topic: expect.any(String),
                 author: expect.any(String),
                 body: expect.any(String),

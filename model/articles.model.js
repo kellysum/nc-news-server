@@ -47,8 +47,11 @@ exports.updateVote = (article_id, inc_votes) => {
       .then((result) => {
         if (result.rows.length === 0) {
           return Promise.reject({ status: 404, msg: 'Article not found' });
+        }else{
+            return result
         }
-  
+      })
+      .then((result) => {
         const currentVotes = result.rows[0].votes;
         const updatedVotes = currentVotes + inc_votes;
   
@@ -59,21 +62,17 @@ exports.updateVote = (article_id, inc_votes) => {
         let updateQuery;
         let queryParams;
   
-        if (inc_votes > 0) {
-          updateQuery = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
-          queryParams = [inc_votes, article_id];
-        } else {
-          updateQuery = `UPDATE articles SET votes = votes - $1 WHERE article_id = $2 RETURNING *`;
-          queryParams = [-inc_votes, article_id];
-        }
+        
+        updateQuery = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`;
+        queryParams = [inc_votes, article_id];
+       
+          
   
         return db.query(updateQuery, queryParams)
           .then((result) => {
-            if (result.rows.length === 0) {
-              return Promise.reject({ status: 404, msg: 'Article not found' });
-            }
+           
             return result.rows[0];
           });
-      });
+      })
   };
   

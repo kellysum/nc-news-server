@@ -83,9 +83,6 @@ exports.patchArticleVote = (req, res, next)=>{
 
     updateVote(article_id, inc_votes)
     .then((updatedArticle)=>{
-        if(!updatedArticle){
-        res.status(404).send({error: 'Article not found'})
-        }
         res.status(200).send({ article: updatedArticle })
         })
         .catch(next)
