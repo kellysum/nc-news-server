@@ -11,9 +11,16 @@ exports.handle404 = (req, res) =>{
 }
 
 exports.handlePsqErrors = (err, req, res, next) =>{
-  if(err.code === "22P02" || err.code === "23502") {
+    if(err.code === "22P02" || err.code === "23502") {
       res.status(400).send({msg: "Bad request"});
-  } else {
+  } else if(err.code==="23503"){
+    res.status(404).send({msg: 'username not found'})
+ } else {
       next(err)
   }
 }
+
+exports.handleServerErrors = (err, req, res, next) =>{
+    console.log(err)
+    res.status(500).send({msg : "internal server error"})
+} 
