@@ -180,28 +180,88 @@ describe("GET /api/articles/:article_id/comments", ()=>{
     })
 
 describe('PATCH /api/articles/:article_id', ()=>{
-    test('204 : responds with an object of updated article by the article_id', ()=>{
-        const newVote = 10
+    test('200 : responds with an updated object with incremented votes given by user at the article_id', ()=>{
+        const newVotes = 10
         return request(app)
         .patch('/api/articles/1')
-        .send({inc_votes : newVote})
+        .send({inc_votes:newVotes})
         .expect(200)
         .then(({body})=>{
-            const {articles} = body
-            expect(articles).toHaveLength(13)
-            expect(articles.votes).toBe(110)
-            expect(articles).toMatchObject({
+            const {article} = body
+            expect(article.votes).toBe(110)
+            expect(article).toMatchObject({
                 article_id: expect.any(Number),
                 topic: expect.any(String),
                 author: expect.any(String),
                 body: expect.any(String),
-                created_at: expect.any(Number),
+                created_at: expect.any(String),
                 article_img_url: expect.any(String),
                 votes: expect.any(Number)
             })
         })
     })
-})
+    test('200 : responds with an updated object with decremented votes given by user at the article_id', ()=>{
+        const newVotes = -10
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(200)
+        .then(({body})=>{
+            const {article} = body
+            expect(article.votes).toBe(90)
+            expect(article).toMatchObject({
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
+        })
+    })
+    test('200 : responds with an updated object with decremented votes can be 0', ()=>{
+        const newVotes = -100
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(200)
+        .then(({body})=>{
+            const {article} = body
+            expect(article.votes).toBe(0)
+            expect(article).toMatchObject({
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
+        })
+    })
+    test('400 : responds with an error message when inc_votes is not an number', ()=>{
+        const newVotes = 'hello'
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes:newVotes})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe('Bad request')
+            })
+        })
+        test('400 : responds with an error message when inc_votes is higher than the votes in article', ()=>{
+            const newVotes = -200
+            return request(app)
+            .patch('/api/articles/1')
+            .send({inc_votes:newVotes})
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe('Bad request')
+                })
+            })
+    })
+
     
 
 

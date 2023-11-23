@@ -37,6 +37,27 @@ exports.checkArticleExist = (article_id)=>{
     })
 }
 
-exports.updateVote = (vote)=>{
-    
+exports.updateVote = (article_id, inc_votes)=>{
+   if(inc_votes === 0 || typeof inc_votes !== 'number'){
+    return Promise.reject({ status: 400, msg: 'Bad request' })
+   }
+    let updateQuery;
+    let queryParams;
+
+    if(inc_votes > 0){
+        updateQuery = `UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *`
+        queryParams = [inc_votes, article_id]
+    } else{
+        updateQuery = `UPDATE articles SET votes = votes - $1 WHERE article_id = $2 RETURNING *`
+        queryParams = [-inc_votes, article_id]
+    }
+
+    return db.query(updateQuery, queryParams)
+    .then((result)=>{
+        if(result.rows.length === 0 ){
+            return Promise.reject({status : 404, msg: 'Article not found'})
+        }
+        console.log(result.rows[0])
+        return result.rows[0]
+    })
 }

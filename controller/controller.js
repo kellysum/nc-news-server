@@ -50,5 +50,16 @@ exports.getCommentByArticleId = (req, res, next)=>{
 }
 
 exports.patchArticleVote = (req, res, next)=>{
-    updateVote
-}
+    const {article_id} = req.params
+    const {inc_votes} = req.body
+
+    if(article.votes >)
+    updateVote(article_id, inc_votes)
+    .then((updatedArticle)=>{
+        if(!updatedArticle){
+        res.status(404).send({error: 'Article not found'})
+        }
+        res.status(200).send({ article: updatedArticle })
+        })
+        .catch(next)
+    }
