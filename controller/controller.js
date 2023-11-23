@@ -91,10 +91,10 @@ exports.patchArticleVote = (req, res, next)=>{
     exports.deleteComment = (req, res, next)=>{
         const {comment_id} = req.params
 
-      const deleteCommentPromise = [ deleteByCommentId(comment_id)]
-       if(comment_id){
-        deleteCommentPromise.push(checkCommentsExists(comment_id))
-       }
+      const deleteCommentPromise = [ deleteByCommentId(comment_id), checkCommentsExists(comment_id)]
+      
+       
+       
        Promise.all(deleteCommentPromise)
       .then(()=>{
             
