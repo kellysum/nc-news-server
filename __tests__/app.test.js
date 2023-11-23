@@ -181,11 +181,24 @@ describe("GET /api/articles/:article_id/comments", ()=>{
 
 describe('PATCH /api/articles/:article_id', ()=>{
     test('204 : responds with an object of updated article by the article_id', ()=>{
+        const newVote = 10
         return request(app)
         .patch('/api/articles/1')
-        .expect(204)
+        .send({inc_votes : newVote})
+        .expect(200)
         .then(({body})=>{
-            expect(body.article).toMatchObject
+            const {articles} = body
+            expect(articles).toHaveLength(13)
+            expect(articles.votes).toBe(110)
+            expect(articles).toMatchObject({
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(Number),
+                article_img_url: expect.any(String),
+                votes: expect.any(Number)
+            })
         })
     })
 })

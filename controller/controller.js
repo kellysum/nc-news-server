@@ -1,5 +1,5 @@
 
-const { selectArticleByArticleId, selectArticles, checkArticleExist } = require("../model/articles.model")
+const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote } = require("../model/articles.model")
 
 const { selectTopics } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
@@ -49,3 +49,6 @@ exports.getCommentByArticleId = (req, res, next)=>{
     .catch(next)
 }
 
+exports.patchArticleVote = (req, res, next)=>{
+    updateVote
+}

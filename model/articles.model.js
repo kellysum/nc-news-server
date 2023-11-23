@@ -37,3 +37,6 @@ exports.checkArticleExist = (article_id)=>{
     })
 }
 
+exports.updateVote = (vote)=>{
+    
+}
