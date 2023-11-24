@@ -8,6 +8,7 @@ const articles = require("../db/data/test-data/articles");
 const endpointsValue = require("../endpoints.json");
 
 
+
 require("jest-sorted");
 
 beforeEach(() => {
@@ -174,7 +175,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("404: responds with an error message for a path", () => {
-    const newComment = { username: "test name", comment: "testing comment" };
+    const newComment = { username: "butter_bridge", comment: "testing comment" };
     return request(app)
       .post("/api/articles/1/comment")
       .send(newComment)
@@ -323,3 +324,31 @@ describe("DELETE /api/comments/:comment_id", () => {
     })
   })
 });
+
+describe('GET /api/users', ()=>{
+    test('200: responds with an array of users object', ()=>{
+        return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users.length).toBe(4);
+        const {users} = body
+        users.forEach((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String)
+          });
+        });
+      });
+  });
+    test("404: responds with an error message for a not found path", () => {
+        return request(app)
+          .get("/api/notauser")
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("path not found");
+          });
+      });
+    })
+
