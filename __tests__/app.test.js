@@ -402,4 +402,44 @@ describe('GET /api/users', ()=>{
 })
   
   })
+describe('GET /api/articles/:article_id with comment_count included',()=>{
+  test('200: responds with an array of article object by article_id with comment_count included', ()=>{
+    return request(app)
+    .get('/api/articles/9')
+    .expect(200)
+    .then(({body})=>{
+      const {articles} = body
+        expect(articles).toMatchObject({
+          title: expect.any(String),
+          topic: expect.any(String),
+          article_id: 9,
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: 2
+        });
+    })
+  })
+  test('200: comment_count should be 0 if the article_id does not have any comments', ()=>{
+    return request(app)
+    .get('/api/articles/8')
+    .expect(200)
+    .then(({body})=>{
+      const {articles} = body
+        expect(articles).toMatchObject({
+          title: expect.any(String),
+          topic: expect.any(String),
+          article_id: 8,
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: 0
+        });
+    })
+  })
+})
   

@@ -1,5 +1,5 @@
 
-const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote } = require("../model/articles.model")
+const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote} = require("../model/articles.model")
 
 const { selectTopics, checkTopicExist } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
@@ -21,6 +21,7 @@ exports.getAllTopics = (req, res, next) => {
   
 }
 
+
 exports.getArticleId = (req, res, next)=>{
     const{article_id} = req.params;
 
@@ -29,6 +30,9 @@ exports.getArticleId = (req, res, next)=>{
     })
     .catch(next)
 }
+  
+      
+  
 
 exports.getAllApi = (req, res, next)=>{
 res.status(200).send({endpoints})
