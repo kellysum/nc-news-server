@@ -12,6 +12,7 @@ exports.selectArticleByArticleId = (article_id)=>{
 }
 
 exports.selectArticles = (topic = null) => {
+  
   let query = `
     SELECT articles.author, title, articles.article_id, topic, articles.created_at, articles.votes, article_img_url, 
     CAST (COUNT (comments.article_id) AS INT) AS comment_count 
@@ -32,9 +33,7 @@ exports.selectArticles = (topic = null) => {
     .then((result) => {
       return result.rows;
     })
-    .catch((error) => {
-      throw error;
-    });
+    
 };
 
 

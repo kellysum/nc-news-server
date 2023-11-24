@@ -9,6 +9,7 @@ const endpointsValue = require("../endpoints.json");
 
 
 
+
 require("jest-sorted");
 
 beforeEach(() => {
@@ -350,5 +351,55 @@ describe('GET /api/users', ()=>{
             expect(body.msg).toBe("path not found");
           });
       });
-    })
+  })
 
+  describe('GET /api/articles with a valid topic parameter', ()=>{
+    test('200: responds with array of article object which filtered by topic', ()=>{
+      const validTopic = 'mitch'
+
+      return request(app)
+      .get(`/api/articles?topic=${validTopic}`)
+      .expect(200)
+      .then(({body})=>{
+         const { articles } = body;
+        expect(articles).toHaveLength(12);
+        expect(articles).toBeSortedBy("created_at", { descending: true });
+        articles.forEach((article) => {
+          expect(article).toMatchObject({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: 'mitch',
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
+          });
+        });
+      })
+     
+    })
+  test('200: responds with an empty array when given a topic that exists but has no article', ()=>{
+    const validTopic = 'paper'
+
+      return request(app)
+      .get(`/api/articles?topic=${validTopic}`)
+      .expect(200)
+      .then(({body})=>{
+         const { articles } = body;
+         expect(articles).toEqual([])
+  })
+    })
+  
+  test('404: responds with an error message if the topic does not exist', ()=>{
+    const invalidTopic = 'hello';
+  return request(app)
+    .get(`/api/articles?topic=${invalidTopic}`)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Topic not found")
+  })
+})
+  
+  })
+  

@@ -1,7 +1,7 @@
 
 const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote } = require("../model/articles.model")
 
-const { selectTopics } = require("../model/topics.model")
+const { selectTopics, checkTopicExist } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
 const { insertComment, checkCommentsExists, getCommentId, deleteByCommentId } = require("../model/comments.model")
 const {checkUserExist} = require("../model/username.model")
@@ -51,14 +51,28 @@ exports.getCommentByArticleId = (req, res, next)=>{
     .catch(next)
 }
 
-exports.getAllArticles = (req, res, next)=>{
-    const {topic} = req.query
-    selectArticles(topic)
-    .then((articles)=>{
-        res.status(200).send({articles})
-    })
-    .catch(next)
-}
+exports.getAllArticles = (req, res, next) => {
+    const { topic } = req.query;
+  
+    if (!topic) {
+      selectArticles()
+        .then((articles) => {
+          res.status(200).send({ articles });
+        })
+    } else {
+      Promise.all([
+        checkTopicExist(topic),
+        selectArticles(topic)
+      ])
+        .then(([topicExists, articles]) => {
+          res.status(200).send({ articles });
+        })
+        .catch(next);
+    }
+  };
+  
+  
+
 exports.postComment = (req, res, next)=>{
     const {article_id} = req.params 
    const newComment = req.body
