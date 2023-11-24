@@ -175,7 +175,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("404: responds with an error message for a path", () => {
-    const newComment = { username: "test name", comment: "testing comment" };
+    const newComment = { username: "butter_bridge", comment: "testing comment" };
     return request(app)
       .post("/api/articles/1/comment")
       .send(newComment)
