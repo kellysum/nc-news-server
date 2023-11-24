@@ -1,9 +1,7 @@
-
 const { selectArticleByArticleId, selectArticles, checkArticleExist, updateVote} = require("../model/articles.model")
-
 const { selectTopics, checkTopicExist } = require("../model/topics.model")
 const endpoints = require("../endpoints.json")
-const { insertComment, checkCommentsExists, getCommentId, deleteByCommentId } = require("../model/comments.model")
+const { insertComment, checkCommentsExists, deleteByCommentId } = require("../model/comments.model")
 const {checkUserExist} = require("../model/username.model")
 
 
